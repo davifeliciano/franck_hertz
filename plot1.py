@@ -23,11 +23,16 @@ for df in dfs:
 
 fig, ax = plt.subplots()
 
+ax.set(xlim=(dfs[0].iloc[0, 1], dfs[0].iloc[-1, 1]),
+       xlabel=r'$ U_a $ (\si{\volt})',
+       ylabel=r'$ I_s $ (\si{\ampere})')
+
 for i in range(len(dfs)):
     x = gaussian_filter1d(dfs[i].loc[:, 'U'], sigma=2)
     y = gaussian_filter1d(dfs[i].loc[:, 'I'], sigma=2)
-
-    ax.plot(x, y, label=rf'${temps[i]} \si{{\kelvin}} $')
+    ax.plot(x, y, label=rf'$ T = {temps[i]} \si{{\kelvin}} $')
 
 ax.legend()
+
+fig.savefig('plots/constant_stop_voltage.png')
 plt.show()
