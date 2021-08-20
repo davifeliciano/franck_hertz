@@ -64,15 +64,26 @@ ax_min.set(xlabel=r'$ U_s $ (\si{\volt})',
            ylabel=r'$ I_s $ (\si{\ampere})')
 
 current_mins = [[df.iloc[i, 0] for df in minima_dfs] for i in range(2)]
+voltage_mins = [[df.iloc[i, 1] for df in minima_dfs] for i in range(2)]
 
-for current_min in current_mins:
-    data = [[u, i] for u, i in zip(voltages, current_min)]
+final_dfs = []
+for current_min, voltage_min in zip(current_mins, voltage_mins):
+    data = [[v, i, u] for v, i, u in zip(voltages, current_min, voltage_min)]
     sorted_data = sorted(data, key=lambda list: list[0])
 
     x = [data[0] for data in sorted_data]
     y = [data[1] for data in sorted_data]
+    u = [data[2] for data in sorted_data]
 
     ax_min.plot(x, y, 'o-', ms=3.0)
+
+    df = pd.DataFrame(np.array([x, y, u]).T, columns=('U_stop', 'I', 'U_drive'))
+    final_dfs.append(df)
+
+# export data for each minimum as csv
+filenames = ('first_minimum.csv', 'second_minimum.csv')
+for df, filename in zip(final_dfs, filenames):
+    df.to_csv(filename, decimal=',', index=None)
 
 fig.savefig('plots/constant_temp.png', dpi=300)
 fig_min.savefig('plots/current_minima.png', dpi=300)
