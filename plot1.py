@@ -34,5 +34,5 @@ for i in range(len(dfs)):
 
 ax.legend()
 
-fig.savefig('plots/constant_stop_voltage.png')
+fig.savefig('plots/constant_stop_voltage.png', dpi=300)
 plt.show()
